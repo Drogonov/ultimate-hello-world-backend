@@ -4,7 +4,10 @@ export const configuration = () => ({
         url: process.env.DATABASE_URL,
     },
     app: {
-        port: process.env.APP_PORT,
-        telegramToken: process.env.TELEGRAM_BOT_TOKEN
+        port: process.env.APP_PORT
+    },
+    jwt: {
+        at: process.env.AT_SECRET,
+        rt: process.env.RT_SECRET
     }
 });

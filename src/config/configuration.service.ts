@@ -13,7 +13,11 @@ export class ConfigurationService {
         return this.configService.get('app.port');;
     }
 
-    getTelegramToken():string {
-        return this.configService.get('app.telegramToken')
+    getAccessTokenSecret():string {
+        return this.configService.get('jwt.at')
+    }
+
+    getRefreshTokenSecret():string {
+        return this.configService.get('jwt.rt')
     }
 }
