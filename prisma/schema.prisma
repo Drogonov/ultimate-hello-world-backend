@@ -23,3 +23,7 @@ model User {
   hash     String
   hashedRt String?
 }
+
+// model Session {
+
+// }

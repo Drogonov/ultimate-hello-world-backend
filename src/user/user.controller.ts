@@ -1,19 +1,20 @@
 import {
   Body,
   Controller,
-  Post
+  Post,
+  Query
 } from '@nestjs/common';
-import { AuthUserDto, EditUserDto } from './dto';
+import { EditUserDto } from './dto';
 import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) { }
 
-  @Post('create')
-  create(@Body() dto: AuthUserDto) {
-    console.log(dto)
-    return this.userService.createUser(dto);
+  @Post('get')
+  get(@Query('userId') userId: string) {
+    const id = parseInt(userId, 10);
+    return this.userService.getUser(id);
   }
 
   @Post('edit')
