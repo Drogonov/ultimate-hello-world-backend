@@ -21,13 +21,14 @@ export class AuthService {
     const hashedOtp = await argon.hash(otp)
 
     let user: User;
-    
+
     try {
       user = await this.prisma.user.create({
         data: {
           email: dto.email,
           hash,
           otpHash: hashedOtp,
+          isVerificated: false
         },
       });
 
@@ -54,7 +55,10 @@ export class AuthService {
 
     await this.prisma.user.update({
       where: { email: dto.email },
-      data: { otpHash: null },
+      data: {
+        otpHash: null,
+        isVerificated: true
+      },
     });
 
     const tokens = await this._getNewSessionTokens(user);
@@ -70,6 +74,8 @@ export class AuthService {
     });
 
     if (!user) throw new ForbiddenException('Cant find following user.');
+
+    if (user.isVerificated == false) throw new ForbiddenException('Need to verify user with OTP');
 
     const passwordMatches = await argon.verify(user.hash, dto.password);
     if (!passwordMatches) throw new ForbiddenException('Password Incorrect.');
@@ -120,7 +126,7 @@ export class AuthService {
           hashedRt: rt
         }
       });
-    
+
     return tokens;
   }
 }
