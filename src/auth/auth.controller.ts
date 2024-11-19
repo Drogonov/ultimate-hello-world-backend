@@ -20,8 +20,15 @@ export class AuthController {
   @Public()
   @Post('local/signup')
   @HttpCode(HttpStatus.CREATED)
-  signupLocal(@Body() dto: AuthDto): Promise<Tokens> {
+  signupLocal(@Body() dto: AuthDto): Promise<string> {
     return this.authService.signupLocal(dto);
+  }
+
+  @Public()
+  @Post('local/verifyotp')
+  @HttpCode(HttpStatus.CREATED)
+  verifyOTP(@Body() dto: AuthDto): Promise<Tokens> {
+    return this.authService.verifyOTP(dto);
   }
 
   @Public()

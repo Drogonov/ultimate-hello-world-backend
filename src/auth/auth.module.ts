@@ -6,10 +6,11 @@ import { AuthService } from './auth.service';
 import { AtStrategy, RtStrategy } from './strategies';
 import { ConfigurationService } from 'src/config/configuration.service';
 import { JWTSessionService } from 'src/jwt-session/jwt-session.service';
+import { MailService } from 'src/mail/mail.service';
 
 @Module({
   imports: [JwtModule.register({})],
   controllers: [AuthController],
-  providers: [AuthService, AtStrategy, RtStrategy, ConfigurationService, JWTSessionService],
+  providers: [AuthService, AtStrategy, RtStrategy, ConfigurationService, JWTSessionService, MailService],
 })
 export class AuthModule {}

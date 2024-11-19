@@ -4,7 +4,8 @@ export const configuration = () => ({
         url: process.env.DATABASE_URL,
     },
     app: {
-        port: process.env.APP_PORT
+        port: process.env.APP_PORT,
+        emailAPI: process.env.SENDGRID_API_KEY
     },
     jwt: {
         at: process.env.AT_SECRET,

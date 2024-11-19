@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guards';
 import { JWTSessionModule } from './jwt-session/jwt-session.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { JWTSessionModule } from './jwt-session/jwt-session.module';
     AuthModule,
     PrismaModule,
     UserModule,
-    JWTSessionModule
+    JWTSessionModule,
+    MailModule
   ],
   controllers: [AppController],
   providers: [

@@ -5,16 +5,21 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
 import { Tokens } from 'src/common/types';
 import { JWTSessionService } from 'src/jwt-session/jwt-session.service';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwtSessionService: JWTSessionService
+    private jwtSessionService: JWTSessionService,
+    private mailService: MailService
   ) { }
 
-  async signupLocal(dto: AuthDto): Promise<Tokens> {
+  async signupLocal(dto: AuthDto): Promise<string> {
     const hash = await argon.hash(dto.password);
+    const otp = Math.floor(100000 + Math.random() * 900000).toString()
+    const hashedOtp = await argon.hash(otp)
+
     let user: User;
     
     try {
@@ -22,15 +27,36 @@ export class AuthService {
         data: {
           email: dto.email,
           hash,
+          otpHash: hashedOtp,
         },
       });
+
+      await this.mailService.sendOtpEmail(dto.email, otp);
+
+      return 'OTP sent to registered email';
+
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
         throw new ForbiddenException('Email is already registered, please sign in.');
       }
       throw error;
     }
-    
+  }
+
+  async verifyOTP(dto: AuthDto): Promise<Tokens> {
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (!user || !await argon.verify(user.otpHash, dto.password)) {
+      throw new ForbiddenException('Invalid OTP');
+    }
+
+    await this.prisma.user.update({
+      where: { email: dto.email },
+      data: { otpHash: null },
+    });
+
     const tokens = await this._getNewSessionTokens(user);
     return tokens;
   }

@@ -6,11 +6,13 @@ import {
 } from '@nestjs/common';
 import { EditUserDto } from './dto';
 import { UserService } from './user.service';
+import { Public } from 'src/common/decorators';
 
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) { }
 
+  @Public()
   @Post('get')
   get(@Query('userId') userId: string) {
     const id = parseInt(userId, 10);

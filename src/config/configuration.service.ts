@@ -13,6 +13,10 @@ export class ConfigurationService {
         return this.configService.get('app.port');;
     }
 
+    getEmailAPI():string {
+        return this.configService.get('app.emailAPI')
+    }
+
     getAccessTokenSecret():string {
         return this.configService.get('jwt.at')
     }

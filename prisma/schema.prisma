@@ -14,24 +14,25 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  userName  String?
-  email     String    @unique
-  hash      String
-  sessions  Session[]
-}
-
-model Session {
-  id        Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  hashedRt  String?
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  userName String?
+  email    String    @unique
+  hash     String
+  otpHash  String?
+  sessions Session[]
+}
+
+model Session {
+  id Int @id @default(autoincrement())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  hashedRt String?
+  userId   Int
+  user     User    @relation(fields: [userId], references: [id])
 }

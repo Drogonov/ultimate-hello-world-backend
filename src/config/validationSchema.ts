@@ -9,5 +9,6 @@ export const validationSchema = Joi.object({
   DATABASE_URL: Joi.string(),
   APP_PORT: Joi.number(),
   AT_SECRET: Joi.string(),
-  RT_SECRET: Joi.string()
+  RT_SECRET: Joi.string(),
+  SENDGRID_API_KEY: Joi.string()
 });
