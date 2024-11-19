@@ -11,7 +11,7 @@ import { Public, GetCurrentUserId, GetCurrentUser } from '../common/decorators';
 import { RtGuard } from '../common/guards';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
-import { Tokens } from './types';
+import { Tokens } from 'src/common/types';
 
 @Controller('auth')
 export class AuthController {
@@ -31,10 +31,15 @@ export class AuthController {
     return this.authService.signinLocal(dto);
   }
 
+  @Public()
+  @UseGuards(RtGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  logout(@GetCurrentUserId() userId: number): Promise<boolean> {
-    return this.authService.logout(userId);
+  logout(
+    @GetCurrentUserId() userId: number,
+    @GetCurrentUser('refreshToken') refreshToken: string,
+  ): Promise<boolean> {
+    return this.authService.logout(userId, refreshToken);
   }
 
   @Public()

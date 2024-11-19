@@ -17,7 +17,7 @@ export class UserService {
       return user
 
     } catch (error) {
-      throw new Error('Failed to create or update user: ' + error.message);
+      throw new Error('Failed to find user: ' + error.message);
     }
   }
 
