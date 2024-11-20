@@ -26,7 +26,7 @@ export class AuthController {
 
   @Public()
   @Post('local/verifyotp')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   verifyOTP(@Body() dto: AuthDto): Promise<Tokens> {
     return this.authService.verifyOTP(dto);
   }
