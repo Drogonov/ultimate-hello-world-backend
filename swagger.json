@@ -1,0 +1,510 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/app/hello": {
+      "post": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LanguageCodeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a greeting",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HelloResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Get Hello response",
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/app/countries": {
+      "post": {
+        "operationId": "AppController_getCountries",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LanguageCodeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a list of countries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountriesResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Get list of countries",
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/app/info": {
+      "post": {
+        "operationId": "AppController_getInfo",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LanguageCodeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns detailed information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InfoResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Get information",
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/app/magic": {
+      "post": {
+        "operationId": "AppController_getMagic",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LanguageCodeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a magical response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MagicResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Get magic response",
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/auth/local/signup": {
+      "post": {
+        "operationId": "AuthController_signupLocal",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OTP sent to registered email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Sign up with email and password",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/local/verifyotp": {
+      "post": {
+        "operationId": "AuthController_verifyOTP",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns access and refresh tokens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokensDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Verify OTP and authenticate user",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/local/signin": {
+      "post": {
+        "operationId": "AuthController_signinLocal",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns access and refresh tokens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokensDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Sign in with email and password",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns true if logout is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "refresh-token": []
+          }
+        ],
+        "summary": "Log out from current session",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refreshTokens",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns new access and refresh tokens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokensDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "refresh-token": []
+          }
+        ],
+        "summary": "Refresh access and refresh tokens",
+        "tags": [
+          "Auth"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "App API",
+    "description": "API documentation for the application",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "access-token": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      },
+      "refresh-token": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "LanguageCodeDto": {
+        "type": "object",
+        "properties": {
+          "languageCode": {
+            "type": "string",
+            "description": "The language code for the request",
+            "example": "en"
+          }
+        },
+        "required": [
+          "languageCode"
+        ]
+      },
+      "HelloResponseDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Hello World"
+          },
+          "text": {
+            "type": "string",
+            "example": "How are you?"
+          },
+          "emoji": {
+            "type": "string",
+            "example": "👋"
+          },
+          "buttonTitle": {
+            "type": "string",
+            "example": "Say hello back"
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "CountryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "United States"
+          },
+          "languageName": {
+            "type": "string",
+            "example": "English"
+          },
+          "languageCode": {
+            "type": "string",
+            "example": "en"
+          },
+          "emoji": {
+            "type": "string",
+            "example": "🇺🇸"
+          },
+          "isCurrent": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "name",
+          "languageName",
+          "languageCode",
+          "emoji",
+          "isCurrent"
+        ]
+      },
+      "CountriesResponseDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Available Countries"
+          },
+          "countries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CountryDto"
+            }
+          }
+        },
+        "required": [
+          "title",
+          "countries"
+        ]
+      },
+      "InfoResponseDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Information Title"
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/image.png"
+          },
+          "text": {
+            "type": "string",
+            "example": "This is some information text."
+          },
+          "buttonTitle": {
+            "type": "string",
+            "example": "Click Here"
+          },
+          "deeplink": {
+            "type": "string",
+            "example": "myapp://deeplink"
+          }
+        },
+        "required": [
+          "title",
+          "imageUrl",
+          "text",
+          "buttonTitle",
+          "deeplink"
+        ]
+      },
+      "MagicResponseDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Magic Title"
+          },
+          "mainText": {
+            "type": "string",
+            "example": "Here is some main text."
+          },
+          "jokeText": {
+            "type": "string",
+            "example": "This is a joke text."
+          },
+          "infoText": {
+            "type": "string",
+            "example": "Additional info text."
+          }
+        },
+        "required": [
+          "title",
+          "mainText",
+          "jokeText",
+          "infoText"
+        ]
+      },
+      "AuthDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The users email",
+            "example": "test@test.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "The users password",
+            "example": "qqqqqqqq"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "TokensDto": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYW50b25AdmxlemtvLmNvbSIsImlhdCI6MTczMjA5MTI4NiwiZXhwIjoxNzMyMDkyMTg2fQ.V5_gB8StUKLlBTiBrMLHNvQiLx_e3gscSF6xUYsmQzc"
+          },
+          "refresh_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoidGVzdDEyM0B0ZXN0LmNvbSIsImlhdCI6MTczMTkxNDg0NCwiZXhwIjoxNzMyNTE5NjQ0fQ.sj5t3EUFMDhai_t2xyzdNtKMVjNGTRhjQYNMZtwu0Xk"
+          }
+        },
+        "required": [
+          "access_token",
+          "refresh_token"
+        ]
+      }
+    }
+  }
+}
