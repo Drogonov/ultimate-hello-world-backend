@@ -35,5 +35,6 @@ async function bootstrap() {
 
   const appPort = configService.getAppPort();
   await app.listen(appPort || 3000);
+  
 }
 bootstrap();
