@@ -1,0 +1,44 @@
+name: Publish Swagger JSON
+
+on:
+  push:
+    branches:
+      - main # Adjust to the branch you want to track
+
+jobs:
+  publish-swagger:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Generate Swagger JSON
+      - name: Generate Swagger JSON
+        run: |
+          npx ts-node -e "const { writeFileSync } = require('fs'); const { DocumentBuilder, SwaggerModule } = require('@nestjs/swagger'); const app = require('./dist/main').createApp(); const config = new DocumentBuilder().setTitle('API').setVersion('1.0').build(); const doc = SwaggerModule.createDocument(app, config); writeFileSync('./swagger.json', JSON.stringify(doc));"
+
+      # Step 5: Push Swagger JSON to the separate repository
+      - name: Push Swagger JSON
+        run: |
+          git clone https://github.com/Drogonov/ultimate-hello-world-swagger swagger-repo
+          cp swagger.json swagger-repo/
+          cd swagger-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add swagger.json
+          git commit -m "Update Swagger JSON"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
