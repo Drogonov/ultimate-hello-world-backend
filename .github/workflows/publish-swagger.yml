@@ -3,7 +3,7 @@ name: Generate and Publish Swagger JSON
 on:
   push:
     branches:
-      - main # Run this workflow on pushes to the main branch
+      - main
 
 jobs:
   generate-swagger:
@@ -32,7 +32,7 @@ jobs:
       # Step 5: Push Swagger JSON to a separate repository
       - name: Push Swagger JSON
         run: |
-          git clone https://github.com/Drogonov/ultimate-hello-world-swagger swagger-repo
+          git clone https://github.com/<your-username>/<your-swagger-repo>.git swagger-repo
           cp swagger.json swagger-repo/
           cd swagger-repo
           git config user.name "github-actions[bot]"
@@ -41,4 +41,4 @@ jobs:
           git commit -m "Update Swagger JSON"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
