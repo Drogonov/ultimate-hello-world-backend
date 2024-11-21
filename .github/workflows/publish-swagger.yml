@@ -32,7 +32,7 @@ jobs:
       # Step 5: Push Swagger JSON to a separate repository
       - name: Push Swagger JSON
         run: |
-          git clone https://github.com/<your-username>/<your-swagger-repo>.git swagger-repo
+          git clone https://github.com/Drogonov/ultimate-hello-world-swagger swagger-repo
           cp swagger.json swagger-repo/
           cd swagger-repo
           git config user.name "github-actions[bot]"
