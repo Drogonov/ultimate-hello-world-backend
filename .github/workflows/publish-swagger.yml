@@ -27,7 +27,7 @@ jobs:
       # Step 4: Generate Swagger JSON
       - name: Generate Swagger JSON
         run: |
-          npx ts-node -e "const { writeFileSync } = require('fs'); const { DocumentBuilder, SwaggerModule } = require('@nestjs/swagger'); const app = require('./dist/main').createApp(); const config = new DocumentBuilder().setTitle('API').setVersion('1.0').build(); const doc = SwaggerModule.createDocument(app, config); writeFileSync('./swagger.json', JSON.stringify(doc));"
+          npx ts-node -e "const { writeFileSync } = require('fs'); const { DocumentBuilder, SwaggerModule } = require('@nestjs/swagger'); const app = require('./src/main').createApp(); const config = new DocumentBuilder().setTitle('API').setVersion('1.0').build(); const doc = SwaggerModule.createDocument(app, config); writeFileSync('./swagger.json', JSON.stringify(doc));"
 
       # Step 5: Push Swagger JSON to the separate repository
       - name: Push Swagger JSON
