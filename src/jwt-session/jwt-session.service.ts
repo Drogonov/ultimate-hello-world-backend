@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './types';
 import { ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION } from 'src/common/constants/constants';
 import { ConfigurationService } from 'src/config/configuration.service';
-import { Tokens } from 'src/common/types';
+import { ITokens } from 'src/common/models';
 import * as argon from 'argon2';
 import { User, Session } from '@prisma/client';
 
@@ -47,7 +47,7 @@ export class JWTSessionService {
     if (!rtMatches) throw new ForbiddenException('Session expired.');
   }
 
-  async getTokens(userId: number, email: string): Promise<Tokens> {
+  async getTokens(userId: number, email: string): Promise<ITokens> {
     const jwtPayload: JwtPayload = {
       sub: userId,
       email: email,

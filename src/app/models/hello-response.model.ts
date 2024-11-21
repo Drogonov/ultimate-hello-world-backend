@@ -1,3 +1,7 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
+// MARK: - Project implementation
+
 export interface IHelloResponse {
     title: string;
     text?: string;
@@ -5,12 +9,18 @@ export interface IHelloResponse {
     buttonTitle?: string;
 }
 
-export const createHelloResponse = (helloData: IHelloResponse): IHelloResponse => {
-    const response: IHelloResponse = {
-        title: helloData.title,
-        text: helloData.text ?? 'How are you?',
-        emoji: helloData.emoji ?? '👋',
-        buttonTitle: helloData.buttonTitle ?? 'Say hello back',
-    }
-    return response;
+// MARK: - Swagger class
+
+export class HelloResponseDto implements IHelloResponse {
+    @ApiProperty({ example: 'Hello World' })
+    title: string;
+
+    @ApiPropertyOptional({ example: 'How are you?' })
+    text?: string;
+
+    @ApiPropertyOptional({ example: '👋' })
+    emoji?: string;
+
+    @ApiPropertyOptional({ example: 'Say hello back' })
+    buttonTitle?: string;
 }

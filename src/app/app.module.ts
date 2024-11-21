@@ -6,7 +6,6 @@ import { configuration } from '../config/configuration';
 import { validationSchema } from '../config/validationSchema';
 import { ConfigurationModule } from '../config/configuration.module';
 import { PrismaModule } from '../prisma/prisma.module';
-import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from '../common/guards';
@@ -24,7 +23,6 @@ import { MailModule } from '../mail/mail.module';
     ConfigurationModule,
     AuthModule,
     PrismaModule,
-    UserModule,
     JWTSessionModule,
     MailModule
   ],

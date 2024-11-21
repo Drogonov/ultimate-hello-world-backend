@@ -3,7 +3,7 @@ import { Prisma, User } from '@prisma/client';
 import * as argon from 'argon2';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
-import { Tokens } from 'src/common/types';
+import { ITokens } from 'src/common/models';
 import { JWTSessionService } from 'src/jwt-session/jwt-session.service';
 import { MailService } from 'src/mail/mail.service';
 
@@ -44,7 +44,7 @@ export class AuthService {
     }
   }
 
-  async verifyOTP(dto: AuthDto): Promise<Tokens> {
+  async verifyOTP(dto: AuthDto): Promise<ITokens> {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -65,7 +65,7 @@ export class AuthService {
     return tokens;
   }
 
-  async signinLocal(dto: AuthDto): Promise<Tokens> {
+  async signinLocal(dto: AuthDto): Promise<ITokens> {
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
@@ -96,7 +96,7 @@ export class AuthService {
     return true;
   }
 
-  async refreshTokens(userId: number, rt: string): Promise<Tokens> {
+  async refreshTokens(userId: number, rt: string): Promise<ITokens> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,

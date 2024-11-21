@@ -1,32 +1,40 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { LanguageCodeDto } from './dto';
-import { ICountriesResponse, IHelloResponse, IInfoResponse, IMagicResponse } from './models';
-import { Public } from 'src/common/decorators';
+import { HelloResponseDto, CountriesResponseDto, InfoResponseDto, MagicResponseDto } from './models';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('App')
+@ApiBearerAuth('access-token')
 @Controller('app')
 export class AppController {
-  constructor(
-    private appService: AppService
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Post('hello')
-  getHello(@Body() dto: LanguageCodeDto): Promise<IHelloResponse> {
+  @ApiOperation({ summary: 'Get Hello response' })
+  @ApiOkResponse({ description: 'Returns a greeting', type: HelloResponseDto })
+  getHello(@Body() dto: LanguageCodeDto): Promise<HelloResponseDto> {
     return this.appService.getHello(dto.languageCode);
   }
 
   @Post('countries')
-  getCountries(@Body() dto: LanguageCodeDto): Promise<ICountriesResponse> {
+  @ApiOperation({ summary: 'Get list of countries' })
+  @ApiOkResponse({ description: 'Returns a list of countries', type: CountriesResponseDto })
+  getCountries(@Body() dto: LanguageCodeDto): Promise<CountriesResponseDto> {
     return this.appService.getCountries(dto.languageCode);
   }
 
   @Post('info')
-  getInfo(@Body() dto: LanguageCodeDto): Promise<IInfoResponse> {
+  @ApiOperation({ summary: 'Get information' })
+  @ApiOkResponse({ description: 'Returns detailed information', type: InfoResponseDto })
+  getInfo(@Body() dto: LanguageCodeDto): Promise<InfoResponseDto> {
     return this.appService.getInfo(dto.languageCode);
   }
 
   @Post('magic')
-  getMagic(@Body() dto: LanguageCodeDto): Promise<IMagicResponse> {
+  @ApiOperation({ summary: 'Get magic response' })
+  @ApiOkResponse({ description: 'Returns a magical response', type: MagicResponseDto })
+  getMagic(@Body() dto: LanguageCodeDto): Promise<MagicResponseDto> {
     return this.appService.getMagic(dto.languageCode);
   }
 }
