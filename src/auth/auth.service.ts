@@ -6,6 +6,7 @@ import { AuthDto } from './dto';
 import { ITokens } from 'src/common/models';
 import { JWTSessionService } from 'src/jwt-session/jwt-session.service';
 import { MailService } from 'src/mail/mail.service';
+import { ISignUpResponse, ILogoutResponse } from './models';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
     private mailService: MailService
   ) { }
 
-  async signupLocal(dto: AuthDto): Promise<string> {
+  async signupLocal(dto: AuthDto): Promise<ISignUpResponse> {
     const hash = await argon.hash(dto.password);
     const otp = Math.floor(100000 + Math.random() * 900000).toString()
     const hashedOtp = await argon.hash(otp)
@@ -34,7 +35,7 @@ export class AuthService {
 
       await this.mailService.sendOtpEmail(dto.email, otp);
 
-      return 'OTP sent to registered email';
+      return { status: "Success" };
 
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
@@ -84,7 +85,7 @@ export class AuthService {
     return tokens;
   }
 
-  async logout(userId: number, rt: string): Promise<boolean> {
+  async logout(userId: number, rt: string): Promise<ILogoutResponse> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
@@ -93,7 +94,7 @@ export class AuthService {
     });
     await this.jwtSessionService.endSession(user, rt);
 
-    return true;
+    return { status: "Success" };
   }
 
   async refreshTokens(userId: number, rt: string): Promise<ITokens> {
@@ -130,3 +131,7 @@ export class AuthService {
     return tokens;
   }
 }
+function LogoutResponse(): ILogoutResponse | PromiseLike<ILogoutResponse> {
+  throw new Error('Function not implemented.');
+}
+

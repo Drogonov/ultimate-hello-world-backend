@@ -3,6 +3,7 @@ import { AppService } from './app.service';
 import { LanguageCodeDto } from './dto';
 import { HelloResponseDto, CountriesResponseDto, InfoResponseDto, MagicResponseDto } from './models';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/common/decorators';
 
 @ApiTags('App')
 @ApiBearerAuth('access-token')

@@ -13,6 +13,7 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { TokensDto } from 'src/common/models';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { SignUpResponseDto, LogoutResponseDto } from './models';
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +24,7 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Sign up with email and password' })
   @ApiCreatedResponse({ description: 'OTP sent to registered email', type: String })
-  signupLocal(@Body() dto: AuthDto): Promise<string> {
+  signupLocal(@Body() dto: AuthDto): Promise<SignUpResponseDto> {
     return this.authService.signupLocal(dto);
   }
 
@@ -55,7 +56,7 @@ export class AuthController {
   logout(
     @GetCurrentUserId() userId: number,
     @GetCurrentUser('refreshToken') refreshToken: string,
-  ): Promise<boolean> {
+  ): Promise<LogoutResponseDto> {
     return this.authService.logout(userId, refreshToken);
   }
 
