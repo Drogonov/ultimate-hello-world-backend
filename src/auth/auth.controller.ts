@@ -23,7 +23,7 @@ export class AuthController {
   @Post('local/signup')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Sign up with email and password' })
-  @ApiCreatedResponse({ description: 'OTP sent to registered email', type: String })
+  @ApiCreatedResponse({ description: 'Returns status if successful', type: SignUpResponseDto })
   signupLocal(@Body() dto: AuthDto): Promise<SignUpResponseDto> {
     return this.authService.signupLocal(dto);
   }
@@ -52,7 +52,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth('refresh-token')
   @ApiOperation({ summary: 'Log out from current session' })
-  @ApiOkResponse({ description: 'Returns true if logout is successful', type: Boolean })
+  @ApiOkResponse({ description: 'Returns status if successful', type: LogoutResponseDto })
   logout(
     @GetCurrentUserId() userId: number,
     @GetCurrentUser('refreshToken') refreshToken: string,
