@@ -39,6 +39,8 @@ jobs:
 
       - name: Push Swagger JSON
         run: |
+          cat swagger.json
+          ls -la swagger-repo
           cp swagger.json swagger-repo/
           cd swagger-repo
           git config user.name "github-actions[bot]"
