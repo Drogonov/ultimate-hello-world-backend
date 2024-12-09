@@ -6,6 +6,7 @@ import { AuthRequestDto, ISignUpResponse, ILogoutResponse } from './dto';
 import { ITokensResponse } from 'src/common/dto';
 import { JWTSessionService } from 'src/jwt-session/jwt-session.service';
 import { MailService } from 'src/mail/mail.service';
+import { BusinessErrorException } from 'src/common/exceptions';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +35,7 @@ export class AuthService {
 
       await this.mailService.sendOtpEmail(dto.email, otp);
 
-      return { status: "Success" };
+      return { status: "success" };
 
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
@@ -73,12 +74,27 @@ export class AuthService {
       include: { sessions: true }
     });
 
-    if (!user) throw new ForbiddenException('Cant find following user.');
+    if (!user) throw new BusinessErrorException({
+      errorSubCode: "USER_DOESNT_EXIST",
+      errorFields: [{
+        fieldCode: "email",
+        errorMsg: "Cant find such user"
+      }]
+    });
 
-    if (user.isVerificated == false) throw new ForbiddenException('Need to verify user with OTP');
+    if (user.isVerificated == false) throw new BusinessErrorException({
+      errorSubCode: "USER_NOT_VERIFIED",
+      errorMsg: "You need to continue registration. Send you a verification password by email?"
+    });
 
     const passwordMatches = await argon.verify(user.hash, dto.password);
-    if (!passwordMatches) throw new ForbiddenException('Password Incorrect.');
+    if (!passwordMatches) throw new BusinessErrorException({
+      errorSubCode: "INCORRECT_PASSWORD",
+      errorFields: [{
+        fieldCode: "password",
+        errorMsg: "Incorrect password"
+      }]
+    });
 
     const tokens = await this._getNewSessionTokens(user);
     return tokens;

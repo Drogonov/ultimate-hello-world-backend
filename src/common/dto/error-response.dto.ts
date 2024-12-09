@@ -3,13 +3,12 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 // MARK: - Project implementation
 
 export interface IErrorFieldResponse {
-    field: string;
+    fieldCode: string;
     errorMsg: string;
 }
 
 export interface IErrorResponse {
-    errorMsg: string;
-    errorCode: string;
+    errorMsg?: string;
     errorSubCode: string;
     errorFields?: [IErrorFieldResponse];
 };
@@ -22,7 +21,7 @@ export class ErrorFieldResponseDto implements IErrorFieldResponse {
         description: "Name of the field which have error",
         example: 'email'
     })
-    field: string;
+    fieldCode: string;
 
     @ApiProperty({ example: 'This email already in use'})
     errorMsg: string;
@@ -30,14 +29,11 @@ export class ErrorFieldResponseDto implements IErrorFieldResponse {
 
 export class ErrorResponseDto implements IErrorResponse {
     @ApiProperty({ example: 'This email already in use'})
-    errorMsg: string;
-
-    @ApiProperty({ example: 'BUSINESS_ERROR'})
-    errorCode: string;
+    errorMsg?: string;
 
     @ApiProperty({ example: 'EMAIL_ALREADY_IN_USE'})
     errorSubCode: string;
 
     @ApiProperty({ description: 'Array of fields with specified errors'})
-    errorFields: [ErrorFieldResponseDto];
+    errorFields?: [ErrorFieldResponseDto];
 }
