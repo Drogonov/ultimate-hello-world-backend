@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ICountriesResponse, IHelloResponse, IInfoResponse, IMagicResponse } from './models';
+import { ICountriesResponse, IHelloResponse, IInfoResponse, IMagicResponse } from './dto';
 
 @Injectable()
 export class AppService {

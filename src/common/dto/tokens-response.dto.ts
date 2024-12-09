@@ -2,14 +2,14 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 // MARK: - Project implementation
 
-export interface ITokens {
+export interface ITokensResponse {
   access_token: string;
   refresh_token: string;
 };
 
 // MARK: - Swagger class
 
-export class TokensDto implements ITokens {
+export class TokensResponseDto implements ITokensResponse {
     @ApiProperty({ example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYW50b25AdmxlemtvLmNvbSIsImlhdCI6MTczMjA5MTI4NiwiZXhwIjoxNzMyMDkyMTg2fQ.V5_gB8StUKLlBTiBrMLHNvQiLx_e3gscSF6xUYsmQzc' })
     access_token: string;
 

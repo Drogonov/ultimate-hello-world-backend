@@ -2,11 +2,10 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import * as argon from 'argon2';
 import { PrismaService } from '../prisma/prisma.service';
-import { AuthDto } from './dto';
-import { ITokens } from 'src/common/models';
+import { AuthRequestDto, ISignUpResponse, ILogoutResponse } from './dto';
+import { ITokensResponse } from 'src/common/dto';
 import { JWTSessionService } from 'src/jwt-session/jwt-session.service';
 import { MailService } from 'src/mail/mail.service';
-import { ISignUpResponse, ILogoutResponse } from './models';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +15,7 @@ export class AuthService {
     private mailService: MailService
   ) { }
 
-  async signupLocal(dto: AuthDto): Promise<ISignUpResponse> {
+  async signupLocal(dto: AuthRequestDto): Promise<ISignUpResponse> {
     const hash = await argon.hash(dto.password);
     const otp = Math.floor(100000 + Math.random() * 900000).toString()
     const hashedOtp = await argon.hash(otp)
@@ -45,7 +44,7 @@ export class AuthService {
     }
   }
 
-  async verifyOTP(dto: AuthDto): Promise<ITokens> {
+  async verifyOTP(dto: AuthRequestDto): Promise<ITokensResponse> {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -66,7 +65,7 @@ export class AuthService {
     return tokens;
   }
 
-  async signinLocal(dto: AuthDto): Promise<ITokens> {
+  async signinLocal(dto: AuthRequestDto): Promise<ITokensResponse> {
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
@@ -97,7 +96,7 @@ export class AuthService {
     return { status: "Success" };
   }
 
-  async refreshTokens(userId: number, rt: string): Promise<ITokens> {
+  async refreshTokens(userId: number, rt: string): Promise<ITokensResponse> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,

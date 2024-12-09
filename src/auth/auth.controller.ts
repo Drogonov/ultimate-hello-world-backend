@@ -10,10 +10,9 @@ import {
 import { Public, GetCurrentUserId, GetCurrentUser } from '../common/decorators';
 import { RtGuard } from '../common/guards';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto';
-import { TokensDto } from 'src/common/models';
+import { AuthRequestDto, SignUpResponseDto, LogoutResponseDto } from './dto';
+import { TokensResponseDto } from 'src/common/dto';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
-import { SignUpResponseDto, LogoutResponseDto } from './models';
 
 @Controller('auth')
 export class AuthController {
@@ -24,7 +23,7 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Sign up with email and password' })
   @ApiCreatedResponse({ description: 'Returns status if successful', type: SignUpResponseDto })
-  signupLocal(@Body() dto: AuthDto): Promise<SignUpResponseDto> {
+  signupLocal(@Body() dto: AuthRequestDto): Promise<SignUpResponseDto> {
     return this.authService.signupLocal(dto);
   }
 
@@ -32,8 +31,8 @@ export class AuthController {
   @Post('local/verifyotp')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Verify OTP and authenticate user' })
-  @ApiOkResponse({ description: 'Returns access and refresh tokens', type: TokensDto })
-  verifyOTP(@Body() dto: AuthDto): Promise<TokensDto> {
+  @ApiOkResponse({ description: 'Returns access and refresh tokens', type: TokensResponseDto })
+  verifyOTP(@Body() dto: AuthRequestDto): Promise<TokensResponseDto> {
     return this.authService.verifyOTP(dto);
   }
 
@@ -41,8 +40,8 @@ export class AuthController {
   @Post('local/signin')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Sign in with email and password' })
-  @ApiOkResponse({ description: 'Returns access and refresh tokens', type: TokensDto })
-  signinLocal(@Body() dto: AuthDto): Promise<TokensDto> {
+  @ApiOkResponse({ description: 'Returns access and refresh tokens', type: TokensResponseDto })
+  signinLocal(@Body() dto: AuthRequestDto): Promise<TokensResponseDto> {
     return this.authService.signinLocal(dto);
   }
 
@@ -66,11 +65,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth('refresh-token')
   @ApiOperation({ summary: 'Refresh access and refresh tokens' })
-  @ApiOkResponse({ description: 'Returns new access and refresh tokens', type: TokensDto })
+  @ApiOkResponse({ description: 'Returns new access and refresh tokens', type: TokensResponseDto })
   refreshTokens(
     @GetCurrentUserId() userId: number,
     @GetCurrentUser('refreshToken') refreshToken: string,
-  ): Promise<TokensDto> {
+  ): Promise<TokensResponseDto> {
     return this.authService.refreshTokens(userId, refreshToken);
   }
 }

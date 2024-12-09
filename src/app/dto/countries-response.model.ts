@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 // MARK: - Project implementation
 
-export interface ICountry {
+export interface ICountryResponse {
   name: string;
   languageName: string;
   languageCode: string;
@@ -12,12 +12,12 @@ export interface ICountry {
 
 export interface ICountriesResponse {
   title: string;
-  countries: ICountry[];
+  countries: ICountryResponse[];
 }
 
 // MARK: - Swagger class
 
-export class CountryDto implements ICountry {
+export class CountryResponseDto implements ICountryResponse {
   @ApiProperty({ example: 'United States' })
   name: string;
 
@@ -38,6 +38,6 @@ export class CountriesResponseDto implements ICountriesResponse {
   @ApiProperty({ example: 'Available Countries' })
   title: string;
 
-  @ApiProperty({ type: [CountryDto] })
-  countries: CountryDto[];
+  @ApiProperty({ type: [CountryResponseDto] })
+  countries: CountryResponseDto[];
 }
