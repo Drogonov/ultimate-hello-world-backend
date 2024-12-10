@@ -11,8 +11,8 @@ import { Public, GetCurrentUserId, GetCurrentUser } from '../common/decorators';
 import { RtGuard } from '../common/guards';
 import { AuthService } from './auth.service';
 import { AuthRequestDto, SignUpResponseDto, LogoutResponseDto } from './dto';
-import { TokensResponseDto } from 'src/common/dto';
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { ErrorResponseDto, TokensResponseDto } from 'src/common/dto';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiUnprocessableEntityResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -22,7 +22,8 @@ export class AuthController {
   @Post('local/signup')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Sign up with email and password' })
-  @ApiCreatedResponse({ description: 'Returns status if successful', type: SignUpResponseDto })
+  @ApiOkResponse({ description: 'Returns status if successful', type: SignUpResponseDto })
+  @ApiUnprocessableEntityResponse({ description: 'Returns business top layer error', type: ErrorResponseDto })
   signupLocal(@Body() dto: AuthRequestDto): Promise<SignUpResponseDto> {
     return this.authService.signupLocal(dto);
   }
@@ -32,6 +33,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Verify OTP and authenticate user' })
   @ApiOkResponse({ description: 'Returns access and refresh tokens', type: TokensResponseDto })
+  @ApiUnprocessableEntityResponse({ description: 'Returns business top layer error', type: ErrorResponseDto })
   verifyOTP(@Body() dto: AuthRequestDto): Promise<TokensResponseDto> {
     return this.authService.verifyOTP(dto);
   }
@@ -41,6 +43,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Sign in with email and password' })
   @ApiOkResponse({ description: 'Returns access and refresh tokens', type: TokensResponseDto })
+  @ApiUnprocessableEntityResponse({ description: 'Returns business top layer error', type: ErrorResponseDto })
   signinLocal(@Body() dto: AuthRequestDto): Promise<TokensResponseDto> {
     return this.authService.signinLocal(dto);
   }
@@ -52,6 +55,7 @@ export class AuthController {
   @ApiBearerAuth('refresh-token')
   @ApiOperation({ summary: 'Log out from current session' })
   @ApiOkResponse({ description: 'Returns status if successful', type: LogoutResponseDto })
+  @ApiUnprocessableEntityResponse({ description: 'Returns business top layer error', type: ErrorResponseDto })
   logout(
     @GetCurrentUserId() userId: number,
     @GetCurrentUser('refreshToken') refreshToken: string,
@@ -66,6 +70,7 @@ export class AuthController {
   @ApiBearerAuth('refresh-token')
   @ApiOperation({ summary: 'Refresh access and refresh tokens' })
   @ApiOkResponse({ description: 'Returns new access and refresh tokens', type: TokensResponseDto })
+  @ApiUnprocessableEntityResponse({ description: 'Returns business top layer error', type: ErrorResponseDto })
   refreshTokens(
     @GetCurrentUserId() userId: number,
     @GetCurrentUser('refreshToken') refreshToken: string,

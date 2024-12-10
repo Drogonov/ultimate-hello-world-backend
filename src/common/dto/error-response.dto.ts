@@ -16,7 +16,6 @@ export interface IErrorResponse {
 // MARK: - Swagger class
 
 export class ErrorFieldResponseDto implements IErrorFieldResponse {
-
     @ApiProperty({ 
         description: "Name of the field which have error",
         example: 'email'
