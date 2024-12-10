@@ -12,7 +12,7 @@ import { RtGuard } from '../common/guards';
 import { AuthService } from './auth.service';
 import { AuthRequestDto, SignUpResponseDto, LogoutResponseDto } from './dto';
 import { ErrorResponseDto, TokensResponseDto } from 'src/common/dto';
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiUnprocessableEntityResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiUnprocessableEntityResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {

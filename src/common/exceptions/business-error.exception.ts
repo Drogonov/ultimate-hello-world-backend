@@ -6,9 +6,7 @@ export class BusinessErrorException extends HttpException {
     private readonly errorResponseMo: ErrorResponseDto,
   ) {
     super(
-      {
-        errorResponseMo,
-      },
+      { errorResponseMo },
       HttpStatus.UNPROCESSABLE_ENTITY,
     );
   }
