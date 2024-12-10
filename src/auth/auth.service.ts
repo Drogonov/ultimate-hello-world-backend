@@ -6,7 +6,7 @@ import { AuthRequestDto, ISignUpResponse, ILogoutResponse } from './dto';
 import { ITokensResponse } from 'src/common/dto';
 import { JWTSessionService } from 'src/jwt-session/jwt-session.service';
 import { MailService } from 'src/mail/mail.service';
-import { BusinessErrorException } from 'src/common/exceptions';
+import { BusinessErrorException, ErrorSubCodes } from 'src/common/exceptions';
 
 @Injectable()
 export class AuthService {
@@ -36,10 +36,15 @@ export class AuthService {
       await this.mailService.sendOtpEmail(dto.email, otp);
 
       return { status: "success" };
-
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-        throw new ForbiddenException('Email is already registered, please sign in.');
+        throw new BusinessErrorException({
+          errorSubCode: ErrorSubCodes.USER_ALREADY_EXIST,
+          errorFields: [{
+            fieldCode: "email",
+            errorMsg: "Email is already registered, please sign in."
+          }]
+        });
       }
       throw error;
     }
@@ -51,7 +56,10 @@ export class AuthService {
     });
 
     if (!user || !await argon.verify(user.otpHash, dto.password)) {
-      throw new ForbiddenException('Invalid OTP');
+      throw new BusinessErrorException({
+        errorSubCode: ErrorSubCodes.INCORRECT_OTP,
+        errorMsg: "Incorrect OTP pls try again"
+      });
     }
 
     await this.prisma.user.update({
@@ -75,7 +83,7 @@ export class AuthService {
     });
 
     if (!user) throw new BusinessErrorException({
-      errorSubCode: "USER_DOESNT_EXIST",
+      errorSubCode: ErrorSubCodes.USER_DOESNT_EXIST,
       errorFields: [{
         fieldCode: "email",
         errorMsg: "Cant find such user"
@@ -83,13 +91,13 @@ export class AuthService {
     });
 
     if (user.isVerificated == false) throw new BusinessErrorException({
-      errorSubCode: "USER_NOT_VERIFIED",
+      errorSubCode: ErrorSubCodes.USER_NOT_VERIFIED,
       errorMsg: "You need to continue registration. Send you a verification password by email?"
     });
 
     const passwordMatches = await argon.verify(user.hash, dto.password);
     if (!passwordMatches) throw new BusinessErrorException({
-      errorSubCode: "INCORRECT_PASSWORD",
+      errorSubCode: ErrorSubCodes.INCORRECT_PASSWORD,
       errorFields: [{
         fieldCode: "password",
         errorMsg: "Incorrect password"
@@ -109,7 +117,7 @@ export class AuthService {
     });
     await this.jwtSessionService.endSession(user, rt);
 
-    return { status: "Success" };
+    return { status: "success" };
   }
 
   async refreshTokens(userId: number, rt: string): Promise<ITokensResponse> {
@@ -146,7 +154,3 @@ export class AuthService {
     return tokens;
   }
 }
-function LogoutResponse(): ILogoutResponse | PromiseLike<ILogoutResponse> {
-  throw new Error('Function not implemented.');
-}
-

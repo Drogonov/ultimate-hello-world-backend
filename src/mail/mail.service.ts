@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as sgMail from '@sendgrid/mail';
+import { BusinessErrorException, ErrorSubCodes } from 'src/common/exceptions';
 import { ConfigurationService } from 'src/config/configuration.service';
 
 @Injectable()
@@ -34,9 +35,11 @@ export class MailService {
 
     try {
       await sgMail.send(msg);
-      console.log('OTP email sent successfully');
     } catch (error) {
-      console.error('Error sending OTP email:', error);
+      throw new BusinessErrorException({
+        errorSubCode: ErrorSubCodes.CANT_DELIVER_VERIFICATION_EMAIL,
+        errorMsg: "Cant deliver verification email pls try again later or use other email"
+      });
     }
   }
 }
