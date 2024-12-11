@@ -2,13 +2,13 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 // MARK: - Project implementation
 
-export interface ISignUpResponse {
+export interface IStatusResponse {
     status: string;
 }
 
 // MARK: - Swagger class
 
-export class SignUpResponseDto implements ISignUpResponse {
+export class StatusResponseDto implements IStatusResponse {
     @ApiProperty({ example: 'Successful' })
     status: string;
 }

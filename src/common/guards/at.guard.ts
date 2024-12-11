@@ -15,7 +15,7 @@ export class AtGuard extends AuthGuard(JWT) {
       context.getClass(),
     ]);
 
-    console.log("ExecutionContext");
+    console.log("AuthGuard ExecutionContext");
     console.log(context.getArgs());
 
     if (isPublic) return true;

@@ -55,11 +55,7 @@ export class CustomValidationPipe extends ValidationPipe {
         Object.values(error.constraints).length > 0
     );
 
-    console.log(emailError);
-
     if (emailError) {
-      console.log(emailError);
-
       return new BusinessErrorException({
         errorSubCode: ErrorSubCodes.INCORRECT_EMAIL,
         errorMsg: "Email is incorrect",
