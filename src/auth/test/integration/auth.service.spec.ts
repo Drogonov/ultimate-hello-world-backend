@@ -196,9 +196,6 @@ describe('Auth Flow', () => {
         email: user.email,
         password: user.password,
       });
-      console.log({
-        _tokens,
-      });
 
       const rt = _tokens.refresh_token;
 

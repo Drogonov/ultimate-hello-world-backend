@@ -166,7 +166,7 @@ export class AuthService {
     await this.jwtSessionService.verifyRtMatch(user, rt);
 
     const tokens = await this.jwtSessionService.getTokens(user.id, user.email);
-    await this.jwtSessionService.updateRtHash(user, tokens.refresh_token);
+    await this.jwtSessionService.updateRtHash(user, rt, tokens.refresh_token);
 
     return tokens;
   }

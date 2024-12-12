@@ -16,10 +16,10 @@ export class JWTSessionService {
     private config: ConfigurationService
   ) { }
 
-  async updateRtHash(user: User & { sessions: Session[] }, rt: string): Promise<void> {
-    const currentSession = await this._findCurrentSesion(user, rt);
-
-    const hash = await argon.hash(rt);
+  async updateRtHash(user: User & { sessions: Session[] }, oldRt: string, newRt: string): Promise<void> {
+    const currentSession = await this._findCurrentSesion(user, oldRt);    
+    const hash = await argon.hash(newRt);
+    
     await this.prisma.session.update({
       where: {
         id: currentSession.id
@@ -40,11 +40,15 @@ export class JWTSessionService {
     });
   }
 
-  async verifyRtMatch(user: User & { sessions: Session[] }, rt: string) {
+  async verifyRtMatch(user: User & { sessions: Session[] }, rt: string): Promise<Boolean> {
     const currentSession = await this._findCurrentSesion(user, rt);
-
     const rtMatches = await argon.verify(currentSession.hashedRt, rt);
-    if (!rtMatches) throw new ForbiddenException('Session expired.');
+
+    if (!rtMatches) {
+      throw new ForbiddenException('Session expired.');
+    } else {
+      return rtMatches;
+    }
   }
 
   async getTokens(userId: number, email: string): Promise<ITokensResponse> {
@@ -72,10 +76,20 @@ export class JWTSessionService {
 
   // MARK: - Private Methods
 
-  async _findCurrentSesion(user: User & { sessions: Session[] }, rt: string) {
-    const session = user?.sessions?.find(s => argon.verify(s.hashedRt, rt));
-    if (!session) throw new ForbiddenException('Cant find following session.');
+  async _findCurrentSesion(user: User & { sessions: Session[] }, rt: string): Promise<Session> {
+    let currentSession: Session;
 
-    return session;
+    for (const session of user.sessions) {
+      const isMatch = await argon.verify(session.hashedRt, rt);
+      if (isMatch) {
+        currentSession = session;
+      }
+    }
+
+    if (!currentSession) {
+      throw new ForbiddenException('Cannot find the matching session.');
+    } else {
+      return currentSession;
+    }
   }
 }
